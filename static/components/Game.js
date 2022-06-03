@@ -19,6 +19,35 @@ class Game {
         this.activeShip = ""
         this.activeBoardTab = []
         this.setShipBool = false
+        this.shipLength = 0
+        this.x
+        this.y
+        this.z
+        this.rotation = true
+        this.boardTab = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
+        this.tab = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
         document.getElementById("root").append(this.renderer.domElement)
         this.addWater()
         this.render()
@@ -30,8 +59,19 @@ class Game {
             if (this.activeShip != "") {
                 this.activeShip.material.color.setHex(0xffffff)
                 this.activeBoardTab.length = 0
+                this.shipLength = 0
+                this.rotation = true
             }
             this.activeShip = this.intersects[0].object
+            if (this.activeShip.geometry.parameters.depth == 38)
+                this.shipLength = 4
+            else if (this.activeShip.geometry.parameters.depth == 28)
+                this.shipLength = 3
+            else if (this.activeShip.geometry.parameters.depth == 18)
+                this.shipLength = 2
+            else if (this.activeShip.geometry.parameters.depth == 8)
+                this.shipLength = 1
+
             if (this.clickBool && this.activeShip != "") {
                 for (let i = 1; i < 101; i++) {
                     for (let j = 101; j < 111; j++) {
@@ -44,10 +84,19 @@ class Game {
                 this.intersects[0].object.material.color.setHex(0x92DFF3)
             }
         } else if (this.intersects.length > 0 && this.intersects[0].object.name == "plansza" && this.activeBoardTab.includes(this.intersects[0].object)) {
-            this.x = this.intersects[0].object.position.x
             this.y = this.intersects[0].object.position.y
-            this.z = this.intersects[0].object.position.z
-
+            if (this.shipLength == 4 || this.shipLength == 2) {
+                if (this.rotation) {
+                    this.x = this.intersects[0].object.position.x
+                    this.z = this.intersects[0].object.position.z - 5
+                } else {
+                    this.x = this.intersects[0].object.position.x + 5
+                    this.z = this.intersects[0].object.position.z
+                }
+            } else {
+                this.x = this.intersects[0].object.position.x
+                this.z = this.intersects[0].object.position.z
+            }
             this.setShipBool = true
         }
         this.clickBool = false
@@ -63,6 +112,59 @@ class Game {
             const tween = new TWEEN.Tween(this.activeShip.position)
                 .to({ x: this.x, y: this.y, z: this.z }, 500)
                 .onComplete(() => {
+                    this.i
+                    this.j
+                    for (let i = 0; i < 10; i++) {
+                        for (let j = 0; j < 10; j++) {
+                            if (this.shipLength == 4 || this.shipLength == 2) {
+                                if (this.rotation && this.boardTab[i][j].children[0].position.x == this.x && this.boardTab[i][j].children[0].position.z == this.z + 5) {
+                                    this.i = i
+                                    this.j = j
+                                } else if (!this.rotation && this.boardTab[i][j].children[0].position.x - 5 == this.x && this.boardTab[i][j].children[0].position.z == this.z) {
+                                    this.i = i
+                                    this.j = j
+                                }
+                            } else if (this.boardTab[i][j].children[0].position.x == this.x && this.boardTab[i][j].children[0].position.z == this.z) {
+                                this.i = i
+                                this.j = j
+                            }
+                        }
+                    }
+                    if (this.shipLength == 1) {
+                        this.tab[this.i][this.j] = 1
+                    } else if (this.shipLength == 2) {
+                        if (this.rotation) {
+                            this.tab[this.i][this.j] = 1
+                            this.tab[this.i][this.j - 1] = 1
+                        } else {
+                            this.tab[this.i][this.j] = 1
+                            this.tab[this.i - 1][this.j] = 1
+                        }
+                    } else if (this.shipLength == 3) {
+                        if (this.rotation) {
+                            this.tab[this.i][this.j] = 1
+                            this.tab[this.i][this.j - 1] = 1
+                            this.tab[this.i][this.j + 1] = 1
+                        } else {
+                            this.tab[this.i][this.j] = 1
+                            this.tab[this.i - 1][this.j] = 1
+                            this.tab[this.i + 1][this.j] = 1
+                        }
+                    } else if (this.shipLength == 4) {
+                        if (this.rotation) {
+                            this.tab[this.i][this.j] = 1
+                            this.tab[this.i][this.j - 2] = 1
+                            this.tab[this.i][this.j - 1] = 1
+                            this.tab[this.i][this.j + 1] = 1
+                        } else {
+                            this.tab[this.i][this.j] = 1
+                            this.tab[this.i - 2][this.j] = 1
+                            this.tab[this.i - 1][this.j] = 1
+                            this.tab[this.i + 1][this.j] = 1
+                        }
+                    }
+
+                    console.log(this.tab)
                     this.setShipBool = false
                     this.activeShip.material.color.setHex(0xffffff)
                     this.activeBoardTab.forEach(e => {
@@ -74,6 +176,15 @@ class Game {
         }
         requestAnimationFrame(this.render)
         this.renderer.render(this.scene, this.camera)
+    }
+
+    shipRotate = () => {
+        if (this.activeShip != "") {
+            if (this.shipLength == 4 || this.shipLength == 2)
+                this.activeShip.material.color.setHex(0xff0000)
+            this.activeShip.rotation.y += Math.PI / 2
+            this.rotation = !this.rotation
+        }
     }
 
     windowResize = () => {
@@ -94,6 +205,7 @@ class Game {
                 this.boardItem.setPosition((i - 5) * 10 + 5, 0, (j + 1) * 10 + 5)
                 this.boardItem.setName("plansza")
                 this.boardItem.setColor("0xffffff")
+                this.boardTab[i][j] = this.boardItem.getBoard()
                 this.scene.add(this.boardItem.getBoard())
             }
         }

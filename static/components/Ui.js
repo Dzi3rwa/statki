@@ -3,9 +3,10 @@ class Ui {
         this.game = game
         this.net = net
         this.resetButtonClick(this.net)
-        this.windowResize()
         this.shipMouseDown(this.game)
         this.saveButton(this.game)
+        this.rotateButton(this.game)
+        this.windowResize()
     }
 
     windowResize = () => {
@@ -84,6 +85,12 @@ class Ui {
             saveButton.style.visibility = "hidden"
             saveRotate.style.visibility = "hidden"
             game.addBoards()
+        })
+    }
+
+    rotateButton = (game) => {
+        document.getElementById("rotate").addEventListener("click", () => {
+            game.shipRotate()
         })
     }
 }
