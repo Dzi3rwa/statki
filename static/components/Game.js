@@ -11,19 +11,19 @@ class Game {
         this.renderer = new THREE.WebGLRenderer()
         this.renderer.setClearColor(0x181818)
         this.renderer.setSize(window.innerWidth, window.innerHeight)
-        this.color = "black"
+        this.color = "black" //jak w warcabach biały albo czarny
         this.raycaster = new THREE.Raycaster()
         this.mouseVector = new THREE.Vector2()
-        this.Bool = false
-        this.clickBool = false
-        this.activeShip = ""
-        this.activeBoardTab = []
-        this.setShipBool = false
-        this.shipLength = 0
+        this.Bool = false //czy mousedown
+        this.clickBool = false //tez mousedown
+        this.activeShip = "" //klikniety statek
+        this.activeBoardTab = [] // tablica aktywnych pol (nie dziala jeszcze, wszystko sie podswietla)
+        this.setShipBool = false //czy mozna ustawic statek
+        this.shipLength = 0//długosc statku
         this.x
         this.y
         this.z
-        this.rotation = true
+        this.rotation = true // rotatcja statku
         this.boardTab = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -35,7 +35,7 @@ class Game {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        ]
+        ] //tablica pol planszy (przy tworzeniu zmienia sie an tablice obiektow)
         this.tab = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -47,12 +47,13 @@ class Game {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        ]
+        ]//tablica glowna
         document.getElementById("root").append(this.renderer.domElement)
         this.addWater()
         this.render()
     }
 
+    //funkcja do ustawiania statkow
     setShipFunction = () => {
         this.intersects = this.raycaster.intersectObjects(this.scene.children)
         if (this.intersects.length > 0 && this.intersects[0].object.name == "statek") {
@@ -112,6 +113,7 @@ class Game {
             const tween = new TWEEN.Tween(this.activeShip.position)
                 .to({ x: this.x, y: this.y, z: this.z }, 500)
                 .onComplete(() => {
+                    //kod generujacy tablice
                     this.i
                     this.j
                     for (let i = 0; i < 10; i++) {
@@ -130,6 +132,7 @@ class Game {
                             }
                         }
                     }
+                    //generowanie talbicy w zaleznosci od dlugosci statku i rotacji
                     if (this.shipLength == 1) {
                         this.tab[this.i][this.j] = 1
                     } else if (this.shipLength == 2) {
@@ -164,7 +167,6 @@ class Game {
                         }
                     }
 
-                    console.log(this.tab)
                     this.setShipBool = false
                     this.activeShip.material.color.setHex(0xffffff)
                     this.activeBoardTab.forEach(e => {
@@ -198,6 +200,7 @@ class Game {
         this.scene.add(this.plane.getPlane())
     }
 
+    //tworzenie tablicy i statkow
     setShips = () => {
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
@@ -235,6 +238,9 @@ class Game {
         }
     }
 
+    //tworzenie dwoch tablic, swojej i przeciwnika po ustawieniu statkow i kliknieciu save
+    //po kliknieciu save trzeba usunac zawartosc sceny, wywolac addBoards i stworzyc statki
+    //fajnie by wygladało jakby wyplywaly zza kamery 
     addBoards = () => {
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
@@ -258,6 +264,7 @@ class Game {
         this.color = color
     }
 
+    //nie wiem czy to jest potrzebne
     changeCamera = () => {
         this.camera.position.set(0, 120, -250)
         this.camera.lookAt(this.scene.position)
