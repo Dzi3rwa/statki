@@ -1,0 +1,90 @@
+body {
+    margin: 0 auto;
+    padding: 0;
+}
+
+.root {
+    overflow: hidden;
+}
+
+.login {
+    position: absolute;
+    top: calc(50% - 300px);
+    right: calc(50% - 300px);
+    border: 10px solid rgb(43, 180, 226);
+    border-radius: 80px;
+    width: 600px;
+    height: 600px;
+    text-align: center;
+    color: rgb(43, 180, 226);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.login h1 {
+    font-size: 80px;
+}
+
+.login button {
+    width: 300px;
+    height: 70px;
+    color: black;
+    text-decoration: none;
+    background-color: rgb(43, 180, 226);
+    border-radius: 80px;
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.save {
+    visibility: hidden;
+    position: absolute;
+    left: 50px;
+    top: 250px;
+    width: 100px;
+    height: 40px;
+    color: black;
+    text-decoration: none;
+    background-color: rgb(43, 180, 226);
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.rotate {
+    visibility: hidden;
+    position: absolute;
+    left: 50px;
+    top: 200px;
+    width: 100px;
+    height: 40px;
+    color: black;
+    text-decoration: none;
+    background-color: rgb(43, 180, 226);
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.login input {
+    width: 300px;
+    height: 70px;
+    margin-bottom: 40px;
+    font-size: 40px;
+    border-radius: 80px;
+    background-color: rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+.top {
+    background-color: rgba(43, 180, 226, 0.4);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 50px);
+    height: 50px;
+    border-bottom: 1px solid rgb(43, 180, 226);
+    padding: 25px;
+}
