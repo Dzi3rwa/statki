@@ -238,7 +238,7 @@ class Game {
         }
     }
 
-    //tworzenie dwoch tablic, swojej i przeciwnika po ustawieniu statkow i kliknieciu save
+    //tworzenie tablicy przeciwnika po ustawieniu statkow i kliknieciu save
     //po kliknieciu save trzeba usunac zawartosc sceny, wywolac addBoards i stworzyc statki
     //fajnie by wygladało jakby wyplywaly zza kamery 
     addBoards = () => {
@@ -246,15 +246,6 @@ class Game {
             for (let j = 0; j < 10; j++) {
                 this.boardItem = new Board()
                 this.boardItem.setPosition((i - 5) * 10 + 5, 0, (j - 11) * 10 + 5)
-                this.boardItem.setName("plansza-white")
-                this.scene.add(this.boardItem.getBoard())
-            }
-        }
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < 10; j++) {
-                this.boardItem = new Board()
-                this.boardItem.setPosition((i - 5) * 10 + 5, 0, (j + 1) * 10 + 5)
-                this.boardItem.setName("plansza-black")
                 this.scene.add(this.boardItem.getBoard())
             }
         }
@@ -262,12 +253,6 @@ class Game {
 
     setColor = (color) => {
         this.color = color
-    }
-
-    //nie wiem czy to jest potrzebne
-    changeCamera = () => {
-        this.camera.position.set(0, 120, -250)
-        this.camera.lookAt(this.scene.position)
     }
 
     //reycaster

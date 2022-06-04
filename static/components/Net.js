@@ -1,5 +1,10 @@
 class Net {
+    constructor() {
+        this.ui
+    }
+
     userLogin = (game, ui) => {
+        this.ui = ui
         let userName = document.getElementById("inputLogin").value
         let body = JSON.stringify({ userName: userName })
         let i = 0
@@ -45,6 +50,29 @@ class Net {
     resetFunction = () => {
         const headers = { "Content-Type": "application/json" }
         fetch(`/clearUserTab`, { method: "post", headers })
+    }
+
+    readyToBattle = (game) => {
+        const ui = this.ui
+        let i = 0
+        const interval = setInterval(waitForSecondPlayer, 300)
+        const body = JSON.stringify({ color: game.color })
+        const headers = { "Content-Type": "application/json" }
+        function waitForSecondPlayer() {
+            fetch(`/waitForStart`, { method: "post", body, headers })
+                .then(response => response.json())
+                .then(data => {
+                    if (data != "") {
+                        game.addBoards()
+                        ui.battleStart()
+                        clearInterval(interval)
+                    } else {
+                        if (i < 1)
+                            ui.waitForSecondPlayer2()
+                    }
+                    i++
+                })
+        }
     }
 }
 export default Net

@@ -4,7 +4,7 @@ class Ui {
         this.net = net
         this.resetButtonClick(this.net)
         this.shipMouseDown(this.game)
-        this.saveButton(this.game)
+        this.saveButton(this.game, this.net)
         this.rotateButton(this.game)
         this.windowResize()
     }
@@ -76,7 +76,7 @@ class Ui {
         window.addEventListener('mousedown', (e) => game.shipClick(e))
     }
 
-    saveButton = (game) => {
+    saveButton = (game, net) => {
         document.getElementById("save").addEventListener("click", () => {
             const loginDiv = document.getElementById("login")
             const saveButton = document.getElementById("save")
@@ -84,8 +84,28 @@ class Ui {
             loginDiv.innerHTML = ""
             saveButton.style.visibility = "hidden"
             saveRotate.style.visibility = "hidden"
-            game.addBoards()
+            net.readyToBattle(game)
         })
+    }
+
+    waitForSecondPlayer2 = () => {
+        const loginDiv = document.getElementById("login")
+        const waitDiv = document.getElementById("wait")
+        waitDiv.style.visibility = "visible"
+        loginDiv.style.border = "none"
+        loginDiv.style.fontSize = "80px"
+        loginDiv.innerHTML = "Czekaj na przeciwnika"
+        const load = document.createElement("div")
+        load.classList.add("load")
+        loginDiv.appendChild(load)
+    }
+
+    battleStart = () => {
+        const loginDiv = document.getElementById("login")
+        loginDiv.style.border = "none"
+        loginDiv.innerHTML = ""
+        const waitDiv = document.getElementById("wait")
+        waitDiv.style.visibility = "hidden"
     }
 
     rotateButton = (game) => {
