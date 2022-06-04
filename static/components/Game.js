@@ -23,6 +23,8 @@ class Game {
         this.x
         this.y
         this.z
+        this.lastI
+        this.lastJ
         this.rotation = true // rotatcja statku
         this.boardTab = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -48,6 +50,18 @@ class Game {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ]//tablica glowna
+        this.tab2 = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]//tablica glowna z podziałem na rodzaj statku
         document.getElementById("root").append(this.renderer.domElement)
         this.addWater()
         this.render()
@@ -74,11 +88,11 @@ class Game {
                 this.shipLength = 1
 
             if (this.clickBool && this.activeShip != "") {
-                for (let i = 1; i < 101; i++) {
-                    for (let j = 101; j < 111; j++) {
-                        if (this.scene.children[i].children[0].position != this.scene.children[j].children[0].position) {
-                            this.scene.children[i].children[0].material.color.setHex(0x00ff00)
-                            this.activeBoardTab.push(this.scene.children[i].children[0])
+                for (let i = 0; i < 10; i++) {
+                    for (let j = 0; j < 10; j++) {
+                        if (this.tab[i][j] == 0) {
+                            this.boardTab[i][j].children[0].material.color.setHex(0x00ff00)
+                            this.activeBoardTab.push(this.boardTab[i][j].children[0])
                         }
                     }
                 }
@@ -132,26 +146,96 @@ class Game {
                             }
                         }
                     }
-                    //generowanie talbicy w zaleznosci od dlugosci statku i rotacji
+
+                    //zmiana pozycji juz ustawionego statku
+                    if (this.lastI != undefined && this.lastJ != undefined) {
+                        if (this.tab[this.lastI][this.lastJ] == 1) {
+                            if (this.shipLength == 1) {
+                                this.tab[this.lastI][this.lastJ] = 0
+                                this.tab2[this.lastI][this.lastJ] = 0
+                            } else if (this.shipLength == 2) {
+                                if (this.rotation) {
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI][this.lastJ - 1] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ - 1] = 0
+                                } else {
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI - 1][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI - 1][this.lastJ] = 0
+                                }
+                            } else if (this.shipLength == 3) {
+                                if (this.rotation) {
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI][this.lastJ - 1] = 0
+                                    this.tab[this.lastI][this.lastJ + 1] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ - 1] = 0
+                                    this.tab2[this.lastI][this.lastJ + 1] = 0
+                                } else {
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI - 1][this.lastJ] = 0
+                                    this.tab[this.lastI + 1][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI - 1][this.lastJ] = 0
+                                    this.tab2[this.lastI + 1][this.lastJ] = 0
+                                }
+                            } else if (this.shipLength == 4) {
+                                if (this.rotation) {
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI][this.lastJ - 2] = 0
+                                    this.tab[this.lastI][this.lastJ - 1] = 0
+                                    this.tab[this.lastI][this.lastJ + 1] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 4
+                                    this.tab2[this.lastI][this.lastJ - 2] = 0
+                                    this.tab2[this.lastI][this.lastJ - 1] = 0
+                                    this.tab2[this.lastI][this.lastJ + 1] = 0
+                                } else {
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI - 2][this.lastJ] = 0
+                                    this.tab[this.lastI - 1][this.lastJ] = 0
+                                    this.tab[this.lastI + 1][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI - 2][this.lastJ] = 0
+                                    this.tab2[this.lastI - 1][this.lastJ] = 0
+                                    this.tab2[this.lastI + 1][this.lastJ] = 0
+                                }
+                            }
+                        }
+                    }
+
+                    //generowanie tablicy w zaleznosci od dlugosci statku i rotacji
                     if (this.shipLength == 1) {
                         this.tab[this.i][this.j] = 1
+                        this.tab2[this.i][this.j] = 1
                     } else if (this.shipLength == 2) {
                         if (this.rotation) {
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i][this.j - 1] = 1
+                            this.tab2[this.i][this.j] = 2
+                            this.tab2[this.i][this.j - 1] = 2
                         } else {
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i - 1][this.j] = 1
+                            this.tab2[this.i][this.j] = 2
+                            this.tab2[this.i - 1][this.j] = 2
                         }
                     } else if (this.shipLength == 3) {
                         if (this.rotation) {
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i][this.j - 1] = 1
                             this.tab[this.i][this.j + 1] = 1
+                            this.tab2[this.i][this.j] = 3
+                            this.tab2[this.i][this.j - 1] = 3
+                            this.tab2[this.i][this.j + 1] = 3
                         } else {
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i - 1][this.j] = 1
                             this.tab[this.i + 1][this.j] = 1
+                            this.tab2[this.i][this.j] = 3
+                            this.tab2[this.i - 1][this.j] = 3
+                            this.tab2[this.i + 1][this.j] = 3
                         }
                     } else if (this.shipLength == 4) {
                         if (this.rotation) {
@@ -159,13 +243,23 @@ class Game {
                             this.tab[this.i][this.j - 2] = 1
                             this.tab[this.i][this.j - 1] = 1
                             this.tab[this.i][this.j + 1] = 1
+                            this.tab2[this.i][this.j] = 4
+                            this.tab2[this.i][this.j - 2] = 4
+                            this.tab2[this.i][this.j - 1] = 4
+                            this.tab2[this.i][this.j + 1] = 4
                         } else {
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i - 2][this.j] = 1
                             this.tab[this.i - 1][this.j] = 1
                             this.tab[this.i + 1][this.j] = 1
+                            this.tab2[this.i][this.j] = 4
+                            this.tab2[this.i - 2][this.j] = 4
+                            this.tab2[this.i - 1][this.j] = 4
+                            this.tab2[this.i + 1][this.j] = 4
                         }
                     }
+                    this.lastI = this.i
+                    this.lastJ = this.j
 
                     this.setShipBool = false
                     this.activeShip.material.color.setHex(0xffffff)
