@@ -23,6 +23,7 @@ class Game {
         this.x
         this.y
         this.z
+        this.lastRot = false
         this.rotation = true // rotatcja statku
         this.boardTab = [
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -98,8 +99,9 @@ class Game {
             }
         } else if (this.intersects.length > 0 && this.intersects[0].object.name == "plansza" && this.activeBoardTab.includes(this.intersects[0].object)) {
             this.y = this.intersects[0].object.position.y
+            const rot = (this.activeShip.rotation.y / 1.57) % 2
             if (this.shipLength == 4 || this.shipLength == 2) {
-                if (this.rotation) {
+                if (rot == 0) {
                     this.x = this.intersects[0].object.position.x
                     this.z = this.intersects[0].object.position.z - 5
                 } else {
@@ -122,19 +124,22 @@ class Game {
             this.setShipFunction()
         }
         if (this.setShipBool) {
+            const z = this.activeShip.position.z
+            const [X, Y, Z] = this.activeShip.position
             const tween = new TWEEN.Tween(this.activeShip.position)
                 .to({ x: this.x, y: this.y, z: this.z }, 500)
                 .onComplete(() => {
                     //kod generujacy tablice
+                    const rot = (this.activeShip.rotation.y / 1.57) % 2
                     this.i
                     this.j
                     for (let i = 0; i < 10; i++) {
                         for (let j = 0; j < 10; j++) {
                             if (this.shipLength == 4 || this.shipLength == 2) {
-                                if (this.rotation && this.boardTab[i][j].children[0].position.x == this.x && this.boardTab[i][j].children[0].position.z == this.z + 5) {
+                                if (rot == 0 && this.boardTab[i][j].children[0].position.x == this.x && this.boardTab[i][j].children[0].position.z == this.z + 5) {
                                     this.i = i
                                     this.j = j
-                                } else if (!this.rotation && this.boardTab[i][j].children[0].position.x - 5 == this.x && this.boardTab[i][j].children[0].position.z == this.z) {
+                                } else if (rot == 1 && this.boardTab[i][j].children[0].position.x - 5 == this.x && this.boardTab[i][j].children[0].position.z == this.z) {
                                     this.i = i
                                     this.j = j
                                 }
@@ -145,12 +150,142 @@ class Game {
                         }
                     }
 
+                    //zmiana pozycji juz ustawionego statku
+                    if (z != -30) {
+                        this.lastI
+                        this.lastJ
+                        this.lastShipLength = this.shipLength
+
+                        for (let i = 0; i < 10; i++) {
+                            for (let j = 0; j < 10; j++) {
+                                if (this.lastShipLength == 4 || this.lastShipLength == 2) {
+                                    if (rot == 0 && this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z + 5) {
+                                        this.lastI = i
+                                        this.lastJ = j
+                                    } else if (rot == 1 && this.boardTab[i][j].children[0].position.x - 5 == X && this.boardTab[i][j].children[0].position.z == Z) {
+                                        this.lastI = i
+                                        this.lastJ = j
+                                    }
+                                } else if (this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z) {
+                                    this.lastI = i
+                                    this.lastJ = j
+                                }
+                            }
+                        }
+
+                        if (this.lastI != undefined && this.lastJ != undefined) {
+                            if (this.tab[this.lastI][this.lastJ] == 1) {
+                                if (this.lastShipLength == 1) {
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                } else if (this.lastShipLength == 2) {
+                                    if (rot == 0) {
+                                        if (this.lastRot == true) {
+                                            this.tab[this.lastI][this.lastJ] = 0
+                                            this.tab[this.lastI - 1][this.lastJ] = 0
+                                            this.tab2[this.lastI][this.lastJ] = 0
+                                            this.tab2[this.lastI - 1][this.lastJ] = 0
+                                        }
+                                        this.tab[this.lastI][this.lastJ] = 0
+                                        this.tab[this.lastI][this.lastJ - 1] = 0
+                                        this.tab2[this.lastI][this.lastJ] = 0
+                                        this.tab2[this.lastI][this.lastJ - 1] = 0
+                                    } else {
+                                        if (this.lastRot == true) {
+                                            this.tab[this.lastI][this.lastJ] = 0
+                                            this.tab[this.lastI][this.lastJ - 1] = 0
+                                            this.tab2[this.lastI][this.lastJ] = 0
+                                            this.tab2[this.lastI][this.lastJ - 1] = 0
+                                        }
+                                        this.tab[this.lastI][this.lastJ] = 0
+                                        this.tab[this.lastI - 1][this.lastJ] = 0
+                                        this.tab2[this.lastI][this.lastJ] = 0
+                                        this.tab2[this.lastI - 1][this.lastJ] = 0
+                                    }
+                                } else if (this.lastShipLength == 3) {
+                                    if (rot == 0) {
+                                        if (this.lastRot == true) {
+                                            this.tab[this.lastI][this.lastJ] = 0
+                                            this.tab[this.lastI - 1][this.lastJ] = 0
+                                            this.tab[this.lastI + 1][this.lastJ] = 0
+                                            this.tab2[this.lastI][this.lastJ] = 0
+                                            this.tab2[this.lastI - 1][this.lastJ] = 0
+                                            this.tab2[this.lastI + 1][this.lastJ] = 0
+                                        }
+                                        this.tab[this.lastI][this.lastJ] = 0
+                                        this.tab[this.lastI][this.lastJ - 1] = 0
+                                        this.tab[this.lastI][this.lastJ + 1] = 0
+                                        this.tab2[this.lastI][this.lastJ] = 0
+                                        this.tab2[this.lastI][this.lastJ - 1] = 0
+                                        this.tab2[this.lastI][this.lastJ + 1] = 0
+                                    } else {
+                                        if (this.lastRot == true) {
+                                            this.tab[this.lastI][this.lastJ] = 0
+                                            this.tab[this.lastI][this.lastJ - 1] = 0
+                                            this.tab[this.lastI][this.lastJ + 1] = 0
+                                            this.tab2[this.lastI][this.lastJ] = 0
+                                            this.tab2[this.lastI][this.lastJ - 1] = 0
+                                            this.tab2[this.lastI][this.lastJ + 1] = 0
+                                        }
+                                        this.tab[this.lastI][this.lastJ] = 0
+                                        this.tab[this.lastI - 1][this.lastJ] = 0
+                                        this.tab[this.lastI + 1][this.lastJ] = 0
+                                        this.tab2[this.lastI][this.lastJ] = 0
+                                        this.tab2[this.lastI - 1][this.lastJ] = 0
+                                        this.tab2[this.lastI + 1][this.lastJ] = 0
+                                    }
+                                } else if (this.lastShipLength == 4) {
+                                    if (rot == 0) {
+                                        if (this.lastRot == true) {
+                                            this.tab[this.lastI][this.lastJ] = 0
+                                            this.tab[this.lastI - 2][this.lastJ] = 0
+                                            this.tab[this.lastI - 1][this.lastJ] = 0
+                                            this.tab[this.lastI + 1][this.lastJ] = 0
+                                            this.tab2[this.lastI][this.lastJ] = 0
+                                            this.tab2[this.lastI - 2][this.lastJ] = 0
+                                            this.tab2[this.lastI - 1][this.lastJ] = 0
+                                            this.tab2[this.lastI + 1][this.lastJ] = 0
+                                        }
+                                        this.tab[this.lastI][this.lastJ] = 0
+                                        this.tab[this.lastI][this.lastJ - 2] = 0
+                                        this.tab[this.lastI][this.lastJ - 1] = 0
+                                        this.tab[this.lastI][this.lastJ + 1] = 0
+                                        this.tab2[this.lastI][this.lastJ] = 0
+                                        this.tab2[this.lastI][this.lastJ - 2] = 0
+                                        this.tab2[this.lastI][this.lastJ - 1] = 0
+                                        this.tab2[this.lastI][this.lastJ + 1] = 0
+                                    } else {
+                                        if (this.lastRot == true) {
+                                            this.tab[this.lastI][this.lastJ] = 0
+                                            this.tab[this.lastI][this.lastJ - 2] = 0
+                                            this.tab[this.lastI][this.lastJ - 1] = 0
+                                            this.tab[this.lastI][this.lastJ + 1] = 0
+                                            this.tab2[this.lastI][this.lastJ] = 0
+                                            this.tab2[this.lastI][this.lastJ - 2] = 0
+                                            this.tab2[this.lastI][this.lastJ - 1] = 0
+                                            this.tab2[this.lastI][this.lastJ + 1] = 0
+                                        }
+                                        this.tab[this.lastI][this.lastJ] = 0
+                                        this.tab[this.lastI - 2][this.lastJ] = 0
+                                        this.tab[this.lastI - 1][this.lastJ] = 0
+                                        this.tab[this.lastI + 1][this.lastJ] = 0
+                                        this.tab2[this.lastI][this.lastJ] = 0
+                                        this.tab2[this.lastI - 2][this.lastJ] = 0
+                                        this.tab2[this.lastI - 1][this.lastJ] = 0
+                                        this.tab2[this.lastI + 1][this.lastJ] = 0
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
                     //generowanie tablicy w zaleznosci od dlugosci statku i rotacji
                     if (this.shipLength == 1) {
                         this.tab[this.i][this.j] = 1
                         this.tab2[this.i][this.j] = 1
                     } else if (this.shipLength == 2) {
-                        if (this.rotation) {
+                        if (rot == 0) {
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i][this.j - 1] = 1
                             this.tab2[this.i][this.j] = 2
@@ -162,7 +297,7 @@ class Game {
                             this.tab2[this.i - 1][this.j] = 2
                         }
                     } else if (this.shipLength == 3) {
-                        if (this.rotation) {
+                        if (rot == 0) {
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i][this.j - 1] = 1
                             this.tab[this.i][this.j + 1] = 1
@@ -178,7 +313,7 @@ class Game {
                             this.tab2[this.i + 1][this.j] = 3
                         }
                     } else if (this.shipLength == 4) {
-                        if (this.rotation) {
+                        if (rot == 0) {
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i][this.j - 2] = 1
                             this.tab[this.i][this.j - 1] = 1
@@ -198,7 +333,7 @@ class Game {
                             this.tab2[this.i + 1][this.j] = 4
                         }
                     }
-
+                    this.lastRot = false
                     this.setShipBool = false
                     this.activeShip.material.color.setHex(0xffffff)
                     this.activeBoardTab.forEach(e => {
@@ -214,10 +349,14 @@ class Game {
 
     shipRotate = () => {
         if (this.activeShip != "") {
-            if (this.shipLength == 4 || this.shipLength == 2)
+            if ((this.shipLength == 4 || this.shipLength == 2) && this.activeShip.position.z != -30)
                 this.activeShip.material.color.setHex(0xff0000)
-            this.activeShip.rotation.y += Math.PI / 2
+            this.activeShip.rotation.y += 1.57
             this.rotation = !this.rotation
+            if (this.activeShip.position.z != -30) {
+                this.setShipBool = true
+                this.lastRot = true
+            }
         }
     }
 
