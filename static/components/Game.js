@@ -162,7 +162,13 @@ class Game {
                                     if (rot == 0 && this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z + 5) {
                                         this.lastI = i
                                         this.lastJ = j
-                                    } else if (rot == 1 && this.boardTab[i][j].children[0].position.x - 5 == X && this.boardTab[i][j].children[0].position.z == Z) {
+                                    } else if (rot == 1 && this.boardTab[i][j].children[0].position.x == X + 5 && this.boardTab[i][j].children[0].position.z == Z) {
+                                        this.lastI = i
+                                        this.lastJ = j
+                                    } else if (rot == 0 && this.boardTab[i][j].children[0].position.x == X + 5 && this.boardTab[i][j].children[0].position.z == Z && this.lastRot == true) {
+                                        this.lastI = i
+                                        this.lastJ = j
+                                    } else if (rot == 1 && this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z + 5 && this.lastRot == true) {
                                         this.lastI = i
                                         this.lastJ = j
                                     }
@@ -282,15 +288,46 @@ class Game {
 
                     //generowanie tablicy w zaleznosci od dlugosci statku i rotacji
                     if (this.shipLength == 1) {
+                        //kratka odstępu między statkami oznaczona 2 w this.tab
+                        for (let i = -1; i < 2; i++) {
+                            for (let j = -1; j < 2; j++) {
+                                try {
+                                    this.tab[this.i - i][this.j - j] = 2
+                                    this.tab[this.i - i][this.j - j] = 2
+                                } catch { }
+                            }
+                        }
+
+                        //w this.tab 1 oznacza statek
                         this.tab[this.i][this.j] = 1
                         this.tab2[this.i][this.j] = 1
                     } else if (this.shipLength == 2) {
                         if (rot == 0) {
+                            //kratka odstępu między statkami oznaczona 2 w this.tab
+                            for (let i = -1; i < 2; i++) {
+                                for (let j = -1; j < 3; j++) {
+                                    try {
+                                        this.tab[this.i - i][this.j - j] = 2
+                                        this.tab[this.i - i][this.j - j] = 2
+                                    } catch { }
+                                }
+                            }
+                            //w this.tab 1 oznacza statek
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i][this.j - 1] = 1
                             this.tab2[this.i][this.j] = 2
                             this.tab2[this.i][this.j - 1] = 2
                         } else {
+                            //kratka odstępu między statkami oznaczona 2 w this.tab
+                            for (let i = -1; i < 3; i++) {
+                                for (let j = -1; j < 2; j++) {
+                                    try {
+                                        this.tab[this.i - i][this.j - j] = 2
+                                        this.tab[this.i - i][this.j - j] = 2
+                                    } catch { }
+                                }
+                            }
+                            //w this.tab 1 oznacza statek
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i - 1][this.j] = 1
                             this.tab2[this.i][this.j] = 2
@@ -298,6 +335,16 @@ class Game {
                         }
                     } else if (this.shipLength == 3) {
                         if (rot == 0) {
+                            //kratka odstępu między statkami oznaczona 2 w this.tab
+                            for (let i = -1; i < 2; i++) {
+                                for (let j = -2; j < 3; j++) {
+                                    try {
+                                        this.tab[this.i - i][this.j - j] = 2
+                                        this.tab[this.i - i][this.j - j] = 2
+                                    } catch { }
+                                }
+                            }
+                            //w this.tab 1 oznacza statek
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i][this.j - 1] = 1
                             this.tab[this.i][this.j + 1] = 1
@@ -305,6 +352,16 @@ class Game {
                             this.tab2[this.i][this.j - 1] = 3
                             this.tab2[this.i][this.j + 1] = 3
                         } else {
+                            //kratka odstępu między statkami oznaczona 2 w this.tab
+                            for (let i = -2; i < 3; i++) {
+                                for (let j = -1; j < 2; j++) {
+                                    try {
+                                        this.tab[this.i - i][this.j - j] = 2
+                                        this.tab[this.i - i][this.j - j] = 2
+                                    } catch { }
+                                }
+                            }
+                            //w this.tab 1 oznacza statek
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i - 1][this.j] = 1
                             this.tab[this.i + 1][this.j] = 1
@@ -314,6 +371,16 @@ class Game {
                         }
                     } else if (this.shipLength == 4) {
                         if (rot == 0) {
+                            //kratka odstępu między statkami oznaczona 2 w this.tab
+                            for (let i = -1; i < 2; i++) {
+                                for (let j = -2; j < 4; j++) {
+                                    try {
+                                        this.tab[this.i - i][this.j - j] = 2
+                                        this.tab[this.i - i][this.j - j] = 2
+                                    } catch { }
+                                }
+                            }
+                            //w this.tab 1 oznacza statek
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i][this.j - 2] = 1
                             this.tab[this.i][this.j - 1] = 1
@@ -323,6 +390,16 @@ class Game {
                             this.tab2[this.i][this.j - 1] = 4
                             this.tab2[this.i][this.j + 1] = 4
                         } else {
+                            //kratka odstępu między statkami oznaczona 2 w this.tab
+                            for (let i = -2; i < 4; i++) {
+                                for (let j = -1; j < 2; j++) {
+                                    try {
+                                        this.tab[this.i - i][this.j - j] = 2
+                                        this.tab[this.i - i][this.j - j] = 2
+                                    } catch { }
+                                }
+                            }
+                            //w this.tab 1 oznacza statek
                             this.tab[this.i][this.j] = 1
                             this.tab[this.i - 2][this.j] = 1
                             this.tab[this.i - 1][this.j] = 1
@@ -340,8 +417,10 @@ class Game {
                         e.material.color.setHex(0xffffff)
                     })
                     this.activeBoardTab.length = 0
+
                 })
             tween.start()
+
         }
         requestAnimationFrame(this.render)
         this.renderer.render(this.scene, this.camera)
