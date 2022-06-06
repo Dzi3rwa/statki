@@ -66,6 +66,20 @@ class Game {
         this.render()
     }
 
+    //render
+    render = () => {
+        TWEEN.update()
+        if (this.Bool) {
+            this.Bool = false
+            this.setShipFunction()
+        }
+        if (this.setShipBool) {
+            this.setShipFunction2()
+        }
+        requestAnimationFrame(this.render)
+        this.renderer.render(this.scene, this.camera)
+    }
+
     //funkcja do ustawiania statkow
     setShipFunction = () => {
         this.intersects = this.raycaster.intersectObjects(this.scene.children)
@@ -117,131 +131,81 @@ class Game {
         this.clickBool = false
     }
 
-    render = () => {
-        TWEEN.update()
-        if (this.Bool) {
-            this.Bool = false
-            this.setShipFunction()
-        }
-        if (this.setShipBool) {
-            const z = this.activeShip.position.z
-            const [X, Y, Z] = this.activeShip.position
-            const tween = new TWEEN.Tween(this.activeShip.position)
-                .to({ x: this.x, y: this.y, z: this.z }, 500)
-                .onComplete(() => {
-                    //kod generujacy tablice
-                    const rot = (this.activeShip.rotation.y / 1.57) % 2
-                    this.i
-                    this.j
-                    for (let i = 0; i < 10; i++) {
-                        for (let j = 0; j < 10; j++) {
-                            if (this.shipLength == 4 || this.shipLength == 2) {
-                                if (rot == 0 && this.boardTab[i][j].children[0].position.x == this.x && this.boardTab[i][j].children[0].position.z == this.z + 5) {
-                                    this.i = i
-                                    this.j = j
-                                } else if (rot == 1 && this.boardTab[i][j].children[0].position.x - 5 == this.x && this.boardTab[i][j].children[0].position.z == this.z) {
-                                    this.i = i
-                                    this.j = j
-                                }
-                            } else if (this.boardTab[i][j].children[0].position.x == this.x && this.boardTab[i][j].children[0].position.z == this.z) {
+    setShipFunction2 = () => {
+        const z = this.activeShip.position.z
+        const [X, Y, Z] = this.activeShip.position
+        const tween = new TWEEN.Tween(this.activeShip.position)
+            .to({ x: this.x, y: this.y, z: this.z }, 500)
+            .onComplete(() => {
+                //kod generujacy tablice
+                const rot = (this.activeShip.rotation.y / 1.57) % 2
+                this.i
+                this.j
+                for (let i = 0; i < 10; i++) {
+                    for (let j = 0; j < 10; j++) {
+                        if (this.shipLength == 4 || this.shipLength == 2) {
+                            if (rot == 0 && this.boardTab[i][j].children[0].position.x == this.x && this.boardTab[i][j].children[0].position.z == this.z + 5) {
                                 this.i = i
                                 this.j = j
+                            } else if (rot == 1 && this.boardTab[i][j].children[0].position.x - 5 == this.x && this.boardTab[i][j].children[0].position.z == this.z) {
+                                this.i = i
+                                this.j = j
+                            }
+                        } else if (this.boardTab[i][j].children[0].position.x == this.x && this.boardTab[i][j].children[0].position.z == this.z) {
+                            this.i = i
+                            this.j = j
+                        }
+                    }
+                }
+
+                //zmiana pozycji juz ustawionego statku
+                if (z != -30) {
+                    this.lastI
+                    this.lastJ
+                    this.lastShipLength = this.shipLength
+
+                    for (let i = 0; i < 10; i++) {
+                        for (let j = 0; j < 10; j++) {
+                            if (this.lastShipLength == 4 || this.lastShipLength == 2) {
+                                if (rot == 0 && this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z + 5) {
+                                    this.lastI = i
+                                    this.lastJ = j
+                                } else if (rot == 1 && this.boardTab[i][j].children[0].position.x == X + 5 && this.boardTab[i][j].children[0].position.z == Z) {
+                                    this.lastI = i
+                                    this.lastJ = j
+                                } else if (rot == 0 && this.boardTab[i][j].children[0].position.x == X + 5 && this.boardTab[i][j].children[0].position.z == Z && this.lastRot == true) {
+                                    this.lastI = i
+                                    this.lastJ = j
+                                } else if (rot == 1 && this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z + 5 && this.lastRot == true) {
+                                    this.lastI = i
+                                    this.lastJ = j
+                                }
+                            } else if (this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z) {
+                                this.lastI = i
+                                this.lastJ = j
                             }
                         }
                     }
 
-                    //zmiana pozycji juz ustawionego statku
-                    if (z != -30) {
-                        this.lastI
-                        this.lastJ
-                        this.lastShipLength = this.shipLength
-
-                        for (let i = 0; i < 10; i++) {
-                            for (let j = 0; j < 10; j++) {
-                                if (this.lastShipLength == 4 || this.lastShipLength == 2) {
-                                    if (rot == 0 && this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z + 5) {
-                                        this.lastI = i
-                                        this.lastJ = j
-                                    } else if (rot == 1 && this.boardTab[i][j].children[0].position.x == X + 5 && this.boardTab[i][j].children[0].position.z == Z) {
-                                        this.lastI = i
-                                        this.lastJ = j
-                                    } else if (rot == 0 && this.boardTab[i][j].children[0].position.x == X + 5 && this.boardTab[i][j].children[0].position.z == Z && this.lastRot == true) {
-                                        this.lastI = i
-                                        this.lastJ = j
-                                    } else if (rot == 1 && this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z + 5 && this.lastRot == true) {
-                                        this.lastI = i
-                                        this.lastJ = j
+                    if (this.lastI != undefined && this.lastJ != undefined) {
+                        if (this.tab[this.lastI][this.lastJ] == 1) {
+                            if (this.lastShipLength == 1) {
+                                for (let i = -1; i < 2; i++) {
+                                    for (let j = -1; j < 2; j++) {
+                                        try {
+                                            this.tab[this.lastI - i][this.lastJ - j] = 0
+                                        } catch { }
                                     }
-                                } else if (this.boardTab[i][j].children[0].position.x == X && this.boardTab[i][j].children[0].position.z == Z) {
-                                    this.lastI = i
-                                    this.lastJ = j
                                 }
-                            }
-                        }
-
-                        if (this.lastI != undefined && this.lastJ != undefined) {
-                            if (this.tab[this.lastI][this.lastJ] == 1) {
-                                if (this.lastShipLength == 1) {
-                                    for (let i = -1; i < 2; i++) {
-                                        for (let j = -1; j < 2; j++) {
-                                            try {
-                                                if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 &&
-                                                    this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                    this.tab[this.lastI - i][this.lastJ - j] = 0
-                                            } catch { }
-                                        }
-                                    }
-                                    this.tab[this.lastI][this.lastJ] = 0
-                                    this.tab2[this.lastI][this.lastJ] = 0
-                                } else if (this.lastShipLength == 2) {
-                                    if (rot == 0) {
-                                        if (this.lastRot == true) {
-                                            for (let i = -1; i < 3; i++) {
-                                                for (let j = -1; j < 2; j++) {
-                                                    try {
-                                                        if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                            this.tab[this.lastI - i][this.lastJ - j] = 0
-                                                    } catch { }
-                                                }
-                                            }
-                                            this.tab[this.lastI][this.lastJ] = 0
-                                            this.tab[this.lastI - 1][this.lastJ] = 0
-                                            this.tab2[this.lastI][this.lastJ] = 0
-                                            this.tab2[this.lastI - 1][this.lastJ] = 0
-                                        }
-                                        for (let i = -1; i < 2; i++) {
-                                            for (let j = -1; j < 3; j++) {
-                                                try {
-                                                    if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                        this.tab[this.lastI - i][this.lastJ - j] = 0
-                                                } catch { }
-                                            }
-                                        }
-                                        this.tab[this.lastI][this.lastJ] = 0
-                                        this.tab[this.lastI][this.lastJ - 1] = 0
-                                        this.tab2[this.lastI][this.lastJ] = 0
-                                        this.tab2[this.lastI][this.lastJ - 1] = 0
-
-                                    } else {
-                                        if (this.lastRot == true) {
-                                            for (let i = -1; i < 2; i++) {
-                                                for (let j = -1; j < 3; j++) {
-                                                    try {
-                                                        if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                            this.tab[this.lastI - i][this.lastJ - j] = 0
-                                                    } catch { }
-                                                }
-                                            }
-                                            this.tab[this.lastI][this.lastJ] = 0
-                                            this.tab[this.lastI][this.lastJ - 1] = 0
-                                            this.tab2[this.lastI][this.lastJ] = 0
-                                            this.tab2[this.lastI][this.lastJ - 1] = 0
-                                        }
+                                this.tab[this.lastI][this.lastJ] = 0
+                                this.tab2[this.lastI][this.lastJ] = 0
+                            } else if (this.lastShipLength == 2) {
+                                if (rot == 0) {
+                                    if (this.lastRot == true) {
                                         for (let i = -1; i < 3; i++) {
                                             for (let j = -1; j < 2; j++) {
                                                 try {
-                                                    if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                        this.tab[this.lastI - i][this.lastJ - j] = 0
+                                                    this.tab[this.lastI - i][this.lastJ - j] = 0
                                                 } catch { }
                                             }
                                         }
@@ -250,60 +214,51 @@ class Game {
                                         this.tab2[this.lastI][this.lastJ] = 0
                                         this.tab2[this.lastI - 1][this.lastJ] = 0
                                     }
-                                } else if (this.lastShipLength == 3) {
-                                    if (rot == 0) {
-                                        if (this.lastRot == true) {
-                                            for (let i = -2; i < 3; i++) {
-                                                for (let j = -1; j < 2; j++) {
-                                                    try {
-                                                        if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                            this.tab[this.lastI - i][this.lastJ - j] = 0
-                                                    } catch { }
-                                                }
-                                            }
-                                            this.tab[this.lastI][this.lastJ] = 0
-                                            this.tab[this.lastI - 1][this.lastJ] = 0
-                                            this.tab[this.lastI + 1][this.lastJ] = 0
-                                            this.tab2[this.lastI][this.lastJ] = 0
-                                            this.tab2[this.lastI - 1][this.lastJ] = 0
-                                            this.tab2[this.lastI + 1][this.lastJ] = 0
+                                    for (let i = -1; i < 2; i++) {
+                                        for (let j = -1; j < 3; j++) {
+                                            try {
+                                                this.tab[this.lastI - i][this.lastJ - j] = 0
+                                            } catch { }
                                         }
+                                    }
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI][this.lastJ - 1] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ - 1] = 0
+
+                                } else {
+                                    if (this.lastRot == true) {
                                         for (let i = -1; i < 2; i++) {
-                                            for (let j = -2; j < 3; j++) {
+                                            for (let j = -1; j < 3; j++) {
                                                 try {
-                                                    if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                        this.tab[this.lastI - i][this.lastJ - j] = 0
+                                                    this.tab[this.lastI - i][this.lastJ - j] = 0
                                                 } catch { }
                                             }
                                         }
                                         this.tab[this.lastI][this.lastJ] = 0
                                         this.tab[this.lastI][this.lastJ - 1] = 0
-                                        this.tab[this.lastI][this.lastJ + 1] = 0
                                         this.tab2[this.lastI][this.lastJ] = 0
                                         this.tab2[this.lastI][this.lastJ - 1] = 0
-                                        this.tab2[this.lastI][this.lastJ + 1] = 0
-                                    } else {
-                                        if (this.lastRot == true) {
-                                            for (let i = -1; i < 2; i++) {
-                                                for (let j = -2; j < 3; j++) {
-                                                    try {
-                                                        if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                            this.tab[this.lastI - i][this.lastJ - j] = 0
-                                                    } catch { }
-                                                }
-                                            }
-                                            this.tab[this.lastI][this.lastJ] = 0
-                                            this.tab[this.lastI][this.lastJ - 1] = 0
-                                            this.tab[this.lastI][this.lastJ + 1] = 0
-                                            this.tab2[this.lastI][this.lastJ] = 0
-                                            this.tab2[this.lastI][this.lastJ - 1] = 0
-                                            this.tab2[this.lastI][this.lastJ + 1] = 0
+                                    }
+                                    for (let i = -1; i < 3; i++) {
+                                        for (let j = -1; j < 2; j++) {
+                                            try {
+                                                this.tab[this.lastI - i][this.lastJ - j] = 0
+                                            } catch { }
                                         }
+                                    }
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI - 1][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI - 1][this.lastJ] = 0
+                                }
+                            } else if (this.lastShipLength == 3) {
+                                if (rot == 0) {
+                                    if (this.lastRot == true) {
                                         for (let i = -2; i < 3; i++) {
                                             for (let j = -1; j < 2; j++) {
                                                 try {
-                                                    if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                        this.tab[this.lastI - i][this.lastJ - j] = 0
+                                                    this.tab[this.lastI - i][this.lastJ - j] = 0
                                                 } catch { }
                                             }
                                         }
@@ -314,66 +269,56 @@ class Game {
                                         this.tab2[this.lastI - 1][this.lastJ] = 0
                                         this.tab2[this.lastI + 1][this.lastJ] = 0
                                     }
-                                } else if (this.lastShipLength == 4) {
-                                    if (rot == 0) {
-                                        if (this.lastRot == true) {
-                                            for (let i = -2; i < 4; i++) {
-                                                for (let j = -1; j < 2; j++) {
-                                                    try {
-                                                        if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                            this.tab[this.lastI - i][this.lastJ - j] = 0
-                                                    } catch { }
-                                                }
-                                            }
-                                            this.tab[this.lastI][this.lastJ] = 0
-                                            this.tab[this.lastI - 2][this.lastJ] = 0
-                                            this.tab[this.lastI - 1][this.lastJ] = 0
-                                            this.tab[this.lastI + 1][this.lastJ] = 0
-                                            this.tab2[this.lastI][this.lastJ] = 0
-                                            this.tab2[this.lastI - 2][this.lastJ] = 0
-                                            this.tab2[this.lastI - 1][this.lastJ] = 0
-                                            this.tab2[this.lastI + 1][this.lastJ] = 0
+                                    for (let i = -1; i < 2; i++) {
+                                        for (let j = -2; j < 3; j++) {
+                                            try {
+                                                this.tab[this.lastI - i][this.lastJ - j] = 0
+                                            } catch { }
                                         }
+                                    }
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI][this.lastJ - 1] = 0
+                                    this.tab[this.lastI][this.lastJ + 1] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ - 1] = 0
+                                    this.tab2[this.lastI][this.lastJ + 1] = 0
+                                } else {
+                                    if (this.lastRot == true) {
                                         for (let i = -1; i < 2; i++) {
-                                            for (let j = -2; j < 4; j++) {
+                                            for (let j = -2; j < 3; j++) {
                                                 try {
-                                                    if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                        this.tab[this.lastI - i][this.lastJ - j] = 0
+                                                    this.tab[this.lastI - i][this.lastJ - j] = 0
                                                 } catch { }
                                             }
                                         }
                                         this.tab[this.lastI][this.lastJ] = 0
-                                        this.tab[this.lastI][this.lastJ - 2] = 0
                                         this.tab[this.lastI][this.lastJ - 1] = 0
                                         this.tab[this.lastI][this.lastJ + 1] = 0
                                         this.tab2[this.lastI][this.lastJ] = 0
-                                        this.tab2[this.lastI][this.lastJ - 2] = 0
                                         this.tab2[this.lastI][this.lastJ - 1] = 0
                                         this.tab2[this.lastI][this.lastJ + 1] = 0
-                                    } else {
-                                        if (this.lastRot == true) {
-                                            for (let i = -1; i < 2; i++) {
-                                                for (let j = -2; j < 4; j++) {
-                                                    try {
-                                                        if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                            this.tab[this.lastI - i][this.lastJ - j] = 0
-                                                    } catch { }
-                                                }
-                                            }
-                                            this.tab[this.lastI][this.lastJ] = 0
-                                            this.tab[this.lastI][this.lastJ - 2] = 0
-                                            this.tab[this.lastI][this.lastJ - 1] = 0
-                                            this.tab[this.lastI][this.lastJ + 1] = 0
-                                            this.tab2[this.lastI][this.lastJ] = 0
-                                            this.tab2[this.lastI][this.lastJ - 2] = 0
-                                            this.tab2[this.lastI][this.lastJ - 1] = 0
-                                            this.tab2[this.lastI][this.lastJ + 1] = 0
+                                    }
+                                    for (let i = -2; i < 3; i++) {
+                                        for (let j = -1; j < 2; j++) {
+                                            try {
+                                                this.tab[this.lastI - i][this.lastJ - j] = 0
+                                            } catch { }
                                         }
+                                    }
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI - 1][this.lastJ] = 0
+                                    this.tab[this.lastI + 1][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI - 1][this.lastJ] = 0
+                                    this.tab2[this.lastI + 1][this.lastJ] = 0
+                                }
+                            } else if (this.lastShipLength == 4) {
+                                if (rot == 0) {
+                                    if (this.lastRot == true) {
                                         for (let i = -2; i < 4; i++) {
                                             for (let j = -1; j < 2; j++) {
                                                 try {
-                                                    if (this.tab[this.lastI - i + 1][this.lastJ - j] != 1 && this.tab[this.lastI - i + 1][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i][this.lastJ - j + 1] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j] != 1 && this.tab[this.lastI - i - 1][this.lastJ - j - 1] != 1 && this.tab[this.lastI - i][this.lastJ - j - 1] != 1)
-                                                        this.tab[this.lastI - i][this.lastJ - j] = 0
+                                                    this.tab[this.lastI - i][this.lastJ - j] = 0
                                                 } catch { }
                                             }
                                         }
@@ -386,16 +331,95 @@ class Game {
                                         this.tab2[this.lastI - 1][this.lastJ] = 0
                                         this.tab2[this.lastI + 1][this.lastJ] = 0
                                     }
+                                    for (let i = -1; i < 2; i++) {
+                                        for (let j = -2; j < 4; j++) {
+                                            try {
+                                                this.tab[this.lastI - i][this.lastJ - j] = 0
+                                            } catch { }
+                                        }
+                                    }
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI][this.lastJ - 2] = 0
+                                    this.tab[this.lastI][this.lastJ - 1] = 0
+                                    this.tab[this.lastI][this.lastJ + 1] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ - 2] = 0
+                                    this.tab2[this.lastI][this.lastJ - 1] = 0
+                                    this.tab2[this.lastI][this.lastJ + 1] = 0
+                                } else {
+                                    if (this.lastRot == true) {
+                                        for (let i = -1; i < 2; i++) {
+                                            for (let j = -2; j < 4; j++) {
+                                                try {
+                                                    this.tab[this.lastI - i][this.lastJ - j] = 0
+                                                } catch { }
+                                            }
+                                        }
+                                        this.tab[this.lastI][this.lastJ] = 0
+                                        this.tab[this.lastI][this.lastJ - 2] = 0
+                                        this.tab[this.lastI][this.lastJ - 1] = 0
+                                        this.tab[this.lastI][this.lastJ + 1] = 0
+                                        this.tab2[this.lastI][this.lastJ] = 0
+                                        this.tab2[this.lastI][this.lastJ - 2] = 0
+                                        this.tab2[this.lastI][this.lastJ - 1] = 0
+                                        this.tab2[this.lastI][this.lastJ + 1] = 0
+                                    }
+                                    for (let i = -2; i < 4; i++) {
+                                        for (let j = -1; j < 2; j++) {
+                                            try {
+                                                this.tab[this.lastI - i][this.lastJ - j] = 0
+                                            } catch { }
+                                        }
+                                    }
+                                    this.tab[this.lastI][this.lastJ] = 0
+                                    this.tab[this.lastI - 2][this.lastJ] = 0
+                                    this.tab[this.lastI - 1][this.lastJ] = 0
+                                    this.tab[this.lastI + 1][this.lastJ] = 0
+                                    this.tab2[this.lastI][this.lastJ] = 0
+                                    this.tab2[this.lastI - 2][this.lastJ] = 0
+                                    this.tab2[this.lastI - 1][this.lastJ] = 0
+                                    this.tab2[this.lastI + 1][this.lastJ] = 0
                                 }
                             }
                         }
                     }
+                }
 
 
-                    //generowanie tablicy w zaleznosci od dlugosci statku i rotacji
-                    if (this.shipLength == 1) {
+                //generowanie tablicy w zaleznosci od dlugosci statku i rotacji
+                if (this.shipLength == 1) {
+                    //kratka odstępu między statkami oznaczona 2 w this.tab
+                    for (let i = -1; i < 2; i++) {
+                        for (let j = -1; j < 2; j++) {
+                            try {
+                                if (this.tab[this.i - i][this.j - j] != 1)
+                                    this.tab[this.i - i][this.j - j] = 2
+                            } catch { }
+                        }
+                    }
+
+                    //w this.tab 1 oznacza statek
+                    this.tab[this.i][this.j] = 1
+                    this.tab2[this.i][this.j] = 1
+                } else if (this.shipLength == 2) {
+                    if (rot == 0) {
                         //kratka odstępu między statkami oznaczona 2 w this.tab
                         for (let i = -1; i < 2; i++) {
+                            for (let j = -1; j < 3; j++) {
+                                try {
+                                    if (this.tab[this.i - i][this.j - j] != 1)
+                                        this.tab[this.i - i][this.j - j] = 2
+                                } catch { }
+                            }
+                        }
+                        //w this.tab 1 oznacza statek
+                        this.tab[this.i][this.j] = 1
+                        this.tab[this.i][this.j - 1] = 1
+                        this.tab2[this.i][this.j] = 2
+                        this.tab2[this.i][this.j - 1] = 2
+                    } else {
+                        //kratka odstępu między statkami oznaczona 2 w this.tab
+                        for (let i = -1; i < 3; i++) {
                             for (let j = -1; j < 2; j++) {
                                 try {
                                     if (this.tab[this.i - i][this.j - j] != 1)
@@ -403,133 +427,98 @@ class Game {
                                 } catch { }
                             }
                         }
-
                         //w this.tab 1 oznacza statek
                         this.tab[this.i][this.j] = 1
-                        this.tab2[this.i][this.j] = 1
-                    } else if (this.shipLength == 2) {
-                        if (rot == 0) {
-                            //kratka odstępu między statkami oznaczona 2 w this.tab
-                            for (let i = -1; i < 2; i++) {
-                                for (let j = -1; j < 3; j++) {
-                                    try {
-                                        if (this.tab[this.i - i][this.j - j] != 1)
-                                            this.tab[this.i - i][this.j - j] = 2
-                                    } catch { }
-                                }
-                            }
-                            //w this.tab 1 oznacza statek
-                            this.tab[this.i][this.j] = 1
-                            this.tab[this.i][this.j - 1] = 1
-                            this.tab2[this.i][this.j] = 2
-                            this.tab2[this.i][this.j - 1] = 2
-                        } else {
-                            //kratka odstępu między statkami oznaczona 2 w this.tab
-                            for (let i = -1; i < 3; i++) {
-                                for (let j = -1; j < 2; j++) {
-                                    try {
-                                        if (this.tab[this.i - i][this.j - j] != 1)
-                                            this.tab[this.i - i][this.j - j] = 2
-                                    } catch { }
-                                }
-                            }
-                            //w this.tab 1 oznacza statek
-                            this.tab[this.i][this.j] = 1
-                            this.tab[this.i - 1][this.j] = 1
-                            this.tab2[this.i][this.j] = 2
-                            this.tab2[this.i - 1][this.j] = 2
-                        }
-                    } else if (this.shipLength == 3) {
-                        if (rot == 0) {
-                            //kratka odstępu między statkami oznaczona 2 w this.tab
-                            for (let i = -1; i < 2; i++) {
-                                for (let j = -2; j < 3; j++) {
-                                    try {
-                                        if (this.tab[this.i - i][this.j - j] != 1)
-                                            this.tab[this.i - i][this.j - j] = 2
-                                    } catch { }
-                                }
-                            }
-                            //w this.tab 1 oznacza statek
-                            this.tab[this.i][this.j] = 1
-                            this.tab[this.i][this.j - 1] = 1
-                            this.tab[this.i][this.j + 1] = 1
-                            this.tab2[this.i][this.j] = 3
-                            this.tab2[this.i][this.j - 1] = 3
-                            this.tab2[this.i][this.j + 1] = 3
-                        } else {
-                            //kratka odstępu między statkami oznaczona 2 w this.tab
-                            for (let i = -2; i < 3; i++) {
-                                for (let j = -1; j < 2; j++) {
-                                    try {
-                                        if (this.tab[this.i - i][this.j - j] != 1)
-                                            this.tab[this.i - i][this.j - j] = 2
-                                    } catch { }
-                                }
-                            }
-                            //w this.tab 1 oznacza statek
-                            this.tab[this.i][this.j] = 1
-                            this.tab[this.i - 1][this.j] = 1
-                            this.tab[this.i + 1][this.j] = 1
-                            this.tab2[this.i][this.j] = 3
-                            this.tab2[this.i - 1][this.j] = 3
-                            this.tab2[this.i + 1][this.j] = 3
-                        }
-                    } else if (this.shipLength == 4) {
-                        if (rot == 0) {
-                            //kratka odstępu między statkami oznaczona 2 w this.tab
-                            for (let i = -1; i < 2; i++) {
-                                for (let j = -2; j < 4; j++) {
-                                    try {
-                                        if (this.tab[this.i - i][this.j - j] != 1)
-                                            this.tab[this.i - i][this.j - j] = 2
-                                    } catch { }
-                                }
-                            }
-                            //w this.tab 1 oznacza statek
-                            this.tab[this.i][this.j] = 1
-                            this.tab[this.i][this.j - 2] = 1
-                            this.tab[this.i][this.j - 1] = 1
-                            this.tab[this.i][this.j + 1] = 1
-                            this.tab2[this.i][this.j] = 4
-                            this.tab2[this.i][this.j - 2] = 4
-                            this.tab2[this.i][this.j - 1] = 4
-                            this.tab2[this.i][this.j + 1] = 4
-                        } else {
-                            //kratka odstępu między statkami oznaczona 2 w this.tab
-                            for (let i = -2; i < 4; i++) {
-                                for (let j = -1; j < 2; j++) {
-                                    try {
-                                        if (this.tab[this.i - i][this.j - j] != 1)
-                                            this.tab[this.i - i][this.j - j] = 2
-                                    } catch { }
-                                }
-                            }
-                            //w this.tab 1 oznacza statek
-                            this.tab[this.i][this.j] = 1
-                            this.tab[this.i - 2][this.j] = 1
-                            this.tab[this.i - 1][this.j] = 1
-                            this.tab[this.i + 1][this.j] = 1
-                            this.tab2[this.i][this.j] = 4
-                            this.tab2[this.i - 2][this.j] = 4
-                            this.tab2[this.i - 1][this.j] = 4
-                            this.tab2[this.i + 1][this.j] = 4
-                        }
+                        this.tab[this.i - 1][this.j] = 1
+                        this.tab2[this.i][this.j] = 2
+                        this.tab2[this.i - 1][this.j] = 2
                     }
-                    this.lastRot = false
-                    this.setShipBool = false
-                    this.activeShip.material.color.setHex(0xffffff)
-                    this.activeBoardTab.forEach(e => {
-                        e.material.color.setHex(0xffffff)
-                    })
-                    this.activeBoardTab.length = 0
-                    console.log(this.tab)
+                } else if (this.shipLength == 3) {
+                    if (rot == 0) {
+                        //kratka odstępu między statkami oznaczona 2 w this.tab
+                        for (let i = -1; i < 2; i++) {
+                            for (let j = -2; j < 3; j++) {
+                                try {
+                                    if (this.tab[this.i - i][this.j - j] != 1)
+                                        this.tab[this.i - i][this.j - j] = 2
+                                } catch { }
+                            }
+                        }
+                        //w this.tab 1 oznacza statek
+                        this.tab[this.i][this.j] = 1
+                        this.tab[this.i][this.j - 1] = 1
+                        this.tab[this.i][this.j + 1] = 1
+                        this.tab2[this.i][this.j] = 3
+                        this.tab2[this.i][this.j - 1] = 3
+                        this.tab2[this.i][this.j + 1] = 3
+                    } else {
+                        //kratka odstępu między statkami oznaczona 2 w this.tab
+                        for (let i = -2; i < 3; i++) {
+                            for (let j = -1; j < 2; j++) {
+                                try {
+                                    if (this.tab[this.i - i][this.j - j] != 1)
+                                        this.tab[this.i - i][this.j - j] = 2
+                                } catch { }
+                            }
+                        }
+                        //w this.tab 1 oznacza statek
+                        this.tab[this.i][this.j] = 1
+                        this.tab[this.i - 1][this.j] = 1
+                        this.tab[this.i + 1][this.j] = 1
+                        this.tab2[this.i][this.j] = 3
+                        this.tab2[this.i - 1][this.j] = 3
+                        this.tab2[this.i + 1][this.j] = 3
+                    }
+                } else if (this.shipLength == 4) {
+                    if (rot == 0) {
+                        //kratka odstępu między statkami oznaczona 2 w this.tab
+                        for (let i = -1; i < 2; i++) {
+                            for (let j = -2; j < 4; j++) {
+                                try {
+                                    if (this.tab[this.i - i][this.j - j] != 1)
+                                        this.tab[this.i - i][this.j - j] = 2
+                                } catch { }
+                            }
+                        }
+                        //w this.tab 1 oznacza statek
+                        this.tab[this.i][this.j] = 1
+                        this.tab[this.i][this.j - 2] = 1
+                        this.tab[this.i][this.j - 1] = 1
+                        this.tab[this.i][this.j + 1] = 1
+                        this.tab2[this.i][this.j] = 4
+                        this.tab2[this.i][this.j - 2] = 4
+                        this.tab2[this.i][this.j - 1] = 4
+                        this.tab2[this.i][this.j + 1] = 4
+                    } else {
+                        //kratka odstępu między statkami oznaczona 2 w this.tab
+                        for (let i = -2; i < 4; i++) {
+                            for (let j = -1; j < 2; j++) {
+                                try {
+                                    if (this.tab[this.i - i][this.j - j] != 1)
+                                        this.tab[this.i - i][this.j - j] = 2
+                                } catch { }
+                            }
+                        }
+                        //w this.tab 1 oznacza statek
+                        this.tab[this.i][this.j] = 1
+                        this.tab[this.i - 2][this.j] = 1
+                        this.tab[this.i - 1][this.j] = 1
+                        this.tab[this.i + 1][this.j] = 1
+                        this.tab2[this.i][this.j] = 4
+                        this.tab2[this.i - 2][this.j] = 4
+                        this.tab2[this.i - 1][this.j] = 4
+                        this.tab2[this.i + 1][this.j] = 4
+                    }
+                }
+                this.lastRot = false
+                this.setShipBool = false
+                this.activeShip.material.color.setHex(0xffffff)
+                this.activeBoardTab.forEach(e => {
+                    e.material.color.setHex(0xffffff)
                 })
-            tween.start()
-
-        }
-        requestAnimationFrame(this.render)
-        this.renderer.render(this.scene, this.camera)
+                this.activeBoardTab.length = 0
+            })
+        tween.start()
     }
 
     shipRotate = () => {
