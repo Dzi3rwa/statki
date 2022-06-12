@@ -1,6 +1,7 @@
 body {
     margin: 0 auto;
     padding: 0;
+    overflow: hidden;
 }
 
 .root {
@@ -14,10 +15,16 @@ body {
     border: 10px solid rgb(43, 180, 226);
     border-radius: 80px;
     width: 600px;
-    height: 600px;
+    height: 700px;
     text-align: center;
     color: rgb(43, 180, 226);
     font-family: Arial, Helvetica, sans-serif;
+    visibility: visible;
+}
+
+.history {
+    visibility: hidden;
+    overflow-y: scroll;
 }
 
 .login h1 {
@@ -100,4 +107,39 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
     height: 100%;
     visibility: hidden;
+}
+
+.smallHistory {
+    margin-bottom: 50px;
+}
+
+.smallDivHistory {
+    width: 80%;
+    margin: 30px auto;
+    border: 2px solid rgb(43, 180, 226);
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.row {
+    display: flex;
+}
+
+.blue {
+    border: 1px solid black;
+    width: 15px;
+    height: 15px;
+    background-color: rgb(43, 180, 226);
+}
+
+.white {
+    border: 1px solid black;
+    width: 15px;
+    height: 15px;
+    background-color: rgb(188, 188, 188);
+}
+
+.div3 {
+    display: flex;
+    justify-content: space-around;
 }

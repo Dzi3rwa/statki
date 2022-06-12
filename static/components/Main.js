@@ -7,8 +7,12 @@ let net
 let ui
 
 window.onload = () => {
-    game = new Game()
     net = new Net()
+    game = new Game(net)
     ui = new Ui(game, net)
     ui.loginButtonClick(game, net, ui)
+    ui.historyButton(net, ui)
+    const snd = new Audio("../music/szanty.mp3");
+    snd.loop = true
+    snd.autoplay = true
 }

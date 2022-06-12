@@ -4,7 +4,7 @@ class Plane {
         this.init()
     }
     init = () => {
-        this.geometryPlane = new THREE.PlaneGeometry(300, 300)
+        this.geometryPlane = new THREE.PlaneGeometry(1000, 1000)
         this.materialPlane = new THREE.MeshBasicMaterial({
             side: THREE.DoubleSide,
             map: new THREE.TextureLoader().load('../textures/water.jpg'),
